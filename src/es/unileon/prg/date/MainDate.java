@@ -9,7 +9,12 @@ public class MainDate
 		System.out.println(date.getDay());
 		System.out.println(date.getMonth());
 		System.out.println(date.getYear());
-		//System.out.println(date.printMonthName());
+
+		System.out.println();
+
+		System.out.println(date2.getDay());
+		System.out.println(date2.getMonth());
+		System.out.println(date2.getYear());
 
 	}
 }

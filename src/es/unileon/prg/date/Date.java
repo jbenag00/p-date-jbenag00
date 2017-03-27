@@ -97,8 +97,9 @@ public class Date
 	
 	public String printMonthName(int month)
 	{
-		String op= new String();
 		_month=month;
+		String op= new String();
+
 		switch(_month)
 		{
 			case 1:
@@ -138,7 +139,8 @@ public class Date
 				op="December";
 				break;
 		}
-		return op;
+		System.out.println("The name of month "+month+" is: "+op);
+		return op.toString();
 	}
 //•A method that checks if  the day of  the month is right
 	public boolean checkDayOfMonth(int month)
