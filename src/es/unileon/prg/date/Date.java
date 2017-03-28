@@ -79,28 +79,24 @@ public class Date
 		}
 		return isSameYear;
 	}
-/*/•The isSame method
+//•The isSame method
 	public boolean isSame(Date date2)
 	{
-		boolean isSameDay=isSameDay();
-		boolean isSameMonth=isSameMonth();
-		boolean isSameYear=isSameYear();
 		boolean isSame=false;
-		if(isSameDay==true&&isSameMonth==true&&isSameYear==true)
+		if(isSameDay(date2)&&isSameMonth(date2)&&isSameYear(date2))
 		{
 			isSame=true;
 		}
 		return isSame;
 	}
-*/	
+	
 //•A method that prints the name of  the month	
 	
 	public String printMonthName(int month)
 	{
-		_month=month;
 		String op= new String();
 
-		switch(_month)
+		switch(month)
 		{
 			case 1:
 				op="January";
@@ -139,15 +135,14 @@ public class Date
 				op="December";
 				break;
 		}
-		System.out.println("The name of month "+month+" is: "+op);
-		return op.toString();
+		return op;
 	}
 //•A method that checks if  the day of  the month is right
-	public boolean checkDayOfMonth(int month)
-	{	
-		boolean checkDayOfMonth=true;
+	public boolean checkDaysOfMonth(int month)//necesito un int
+	{	_month=month;
+		boolean checkDaysOfMonth=true;
 		int days;
-		switch(month)
+		switch(_month)
 		{
 			case 1:
 			case 3:
@@ -170,19 +165,100 @@ public class Date
 			default:
 				days=0;
 		}
-		if(days<1||days>31)
+		if(days<1||days>31)//NO FUNCIONA
 		{
-			checkDayOfMonth=false;
+			checkDaysOfMonth=false;
 			System.out.println("Write a correct number of the day.\n");
 		}
-		return checkDayOfMonth;
+		return checkDaysOfMonth;
+	}
+
+
+//•A method that prints the season of  this month	
+	public String seasonOfYear()
+	{
+		String seasonOfYear=new String();
+		switch(getMonth())
+		{
+			case 1:
+			case 2:
+				seasonOfYear=("Winter.");
+				break;
+			case 3:
+				if(getDay()<21)
+				{
+					seasonOfYear=("Winter.");
+				}
+					else
+					{
+						seasonOfYear=("Spring.");
+					}
+				break;
+			case 4:
+			case 5:	
+				seasonOfYear=("Spring.");
+				break;
+			case 6:
+				if(getDay()<21)
+				{
+					seasonOfYear=("Spring.");
+				}
+					else
+					{
+						seasonOfYear=("Summer.");
+					}
+				break;
+			case 7:
+			case 8:
+				seasonOfYear=("Summer.");
+			case 9:
+				if(getDay()<23){
+					seasonOfYear=("Summer.");
+				}
+				else{
+					seasonOfYear=("Autumn.");
+				}
+				break;
+			case 10:
+			case 11:	
+				seasonOfYear=("Autumn.");
+				break;
+			case 12:
+				if(getDay()<22){
+					seasonOfYear=("Autumn.");
+				}
+					else
+					{
+						seasonOfYear=("Winter.");		
+					}
+				break;
+		}
+		return seasonOfYear;
+	}	
+
+
+	
+//•Write a method in Date class that prints a date.
+	public String printDate()
+	{
+		StringBuffer date=new StringBuffer();
+		date.append(getDay()+"/"+printMonthName(getMonth())+"/"+getYear());
+		return date.toString();
 	}
 
 
 
-
-
-
+//For a date, print the months left until the end of the year.
+	public String monthUntilEndYear()
+	{
+		StringBuffer output=new StringBuffer();
+		int month=getMonth();;
+		for(int i=month+1;i<=12;i++)
+		{
+			output.append(printMonthName(i)+"\n");
+		}
+		return output.toString();
+	}
 		
 }
 
