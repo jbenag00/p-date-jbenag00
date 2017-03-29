@@ -7,11 +7,31 @@ public class Date
 	private int _month;
 	private int _year;
 	
-	public Date(int day, int month, int year)
-	{       
-		this._day=day;
-		this._month=month;
-		this._year=year;
+	public Date(int day, int month, int year)throws Excepcion
+	{
+		StringBuffer message= new StringBuffer();
+		if(day<1||day>31){
+			message.append("Write a correct number of the day.\n");
+		}
+
+		if(month<1||month>12){
+			message.append("Write a correct number of month.\n");
+		}else if ((day>30)&&(month==4||month==6||month==9||month==11)){
+			message.append("The month "+month+" only have 30 days\n");
+		}else if ((day>28)&&(month==2)){
+			message.append("The month "+month+" only have 28 days\n");
+		}else if(year<1){
+			message.append("The year "+year+" must be possitive.\n");
+		}
+
+		if(message.length()!=0){
+			throw new Excepcion(message.toString());
+		}else{
+			this._day=day;
+			this._month=month;
+			this._year=year;
+		}
+	
 	}	
 
 	public int getDay()
@@ -29,9 +49,11 @@ public class Date
 		return this._year;
 	}
 	
+//Para que utilizamos los set?modificar el que?
 	public void setDay(int newDay)
 	{
-		this._day=newDay;
+		this._day = newDay;
+
 	}
 	
 	public void setMonth(int newMonth)
@@ -50,21 +72,26 @@ public class Date
 	public boolean isSameDay(Date date2)
 	{
 		boolean isSameDay=false;
-		if(_day==date2.getDay())
-		{
+		if(this._day==date2.getDay()){
 			isSameDay=true;
 		}
 		return isSameDay;
 	}
+/*SIN SENTENCIA IF DUDA PREGUNTAR	
+	public boolean isSameDay(Date date2)
+	{
 
+		return this._day==date2.getDay();
+
+	}
+*/
 
 
 //•The isSameMonth method	
 	public boolean isSameMonth(Date date2)
 	{
 		boolean isSameMonth=false;
-		if(_month==date2.getMonth())
-		{
+		if(this._month==date2.getMonth()){
 			isSameMonth=true;
 		}
 		return isSameMonth;
@@ -73,8 +100,7 @@ public class Date
 	public boolean isSameYear(Date date2)
 	{
 		boolean isSameYear=false;
-		if(_year==date2.getYear())
-		{
+		if(_year==date2.getYear()){
 			isSameYear=true;
 		}
 		return isSameYear;
@@ -83,8 +109,7 @@ public class Date
 	public boolean isSame(Date date2)
 	{
 		boolean isSame=false;
-		if(isSameDay(date2)&&isSameMonth(date2)&&isSameYear(date2))
-		{
+		if(isSameDay(date2)&&isSameMonth(date2)&&isSameYear(date2)){
 			isSame=true;
 		}
 		return isSame;
@@ -137,12 +162,14 @@ public class Date
 		}
 		return op;
 	}
+
+
+
 //•A method that checks if  the day of  the month is right
-	public boolean checkDaysOfMonth(int month)//necesito un int
-	{	_month=month;
-		boolean checkDaysOfMonth=true;
+	public int daysOfMonth(int month)
+	{
 		int days;
-		switch(_month)
+		switch(month)
 		{
 			case 1:
 			case 3:
@@ -165,12 +192,16 @@ public class Date
 			default:
 				days=0;
 		}
-		if(days<1||days>31)//NO FUNCIONA
-		{
-			checkDaysOfMonth=false;
-			System.out.println("Write a correct number of the day.\n");
+		return days;
+	}
+	public boolean checkDaysOfMonth(int day)
+	{
+		boolean checkDaysOfMonth=false;
+		if(day>0&&day<this.daysOfMonth(getMonth())){
+			checkDaysOfMonth=true;
 		}
 		return checkDaysOfMonth;
+
 	}
 
 
@@ -241,9 +272,9 @@ public class Date
 //•Write a method in Date class that prints a date.
 	public String printDate()
 	{
-		StringBuffer date=new StringBuffer();
-		date.append(getDay()+"/"+printMonthName(getMonth())+"/"+getYear());
-		return date.toString();
+		StringBuffer printdate=new StringBuffer();
+		printdate.append(getDay()+"/"+printMonthName(getMonth())+"/"+getYear());
+		return printdate.toString();
 	}
 
 
@@ -251,14 +282,84 @@ public class Date
 //For a date, print the months left until the end of the year.
 	public String monthUntilEndYear()
 	{
-		StringBuffer output=new StringBuffer();
+		StringBuffer monthsEndYear=new StringBuffer();
 		int month=getMonth();;
-		for(int i=month+1;i<=12;i++)
-		{
-			output.append(printMonthName(i)+"\n");
-		}
-		return output.toString();
+		
+			for(int i=month+1;i<=12;i++)
+			{
+				monthsEndYear.append(printMonthName(i)+"\n");
+			}
+		return monthsEndYear.toString();
 	}
+
+
+
+//•For a date, print all dates until the end of  the month.	
+	public String dateUntilEndMonth()
+		{
+		int i;
+		StringBuffer dates=new StringBuffer();
+		dates.append("The days to the end of the month "+printMonthName(getMonth())+" are;\n");
+		for(i=getDay()+1;i<=daysOfMonth(getMonth());i++)
+		{
+			dates.append(i+","+printMonthName(getMonth())+","+getYear()+"\n");
+		}
+		return dates.toString();
+	}
+
+
+
+//•For a date, print the months with the same number of days as the month of  this date.	
+	public String sameDaysOfMonth()
+	{
+		StringBuffer months=new StringBuffer();;
+		int days=daysOfMonth(getMonth());
+		int i=0;
+		months.append("The months with same days than "+printMonthName(getMonth())+" are: \n");
+		for(i=1;i<=12;i++)
+		{
+			if(daysOfMonth(i)==days)
+			{
+				months.append(printMonthName(i)+"\n");	
+			}
+		}
+		return months.toString();
+	}
+
+
+
+//•For a date, count the number  of  days since the first day of  the year (do not consider leap years)	
+	public String sinceFirstDayOfYear()
+	{
+		StringBuffer dates = new StringBuffer();
+		int i,j,k;
+		dates.append("The days since the first day of the year until "+printDate()+" are:\n");
+		for(i=1;i<=getMonth();i++)
+		{
+			if(i!=getMonth())
+			{
+				for(j=1;j<=daysOfMonth(i);j++)
+				{
+					dates.append(j+","+printMonthName(i)+","+getYear()+"\n");
+				}
+			}
+				else
+				{
+					for(k=1;k<getDay();k++)
+					{
+					dates.append(k+","+printMonthName(i)+","+getYear()+"\n");
+					}
+				}
+		}
+		return dates.toString();
+	}
+/*
+•In the Date class build the following methods:
+	•Build a method that counts the number of attempts needed to generate a random date equals to a given date(only inside the same year)
+		•Do it using a while statement
+		•Do it using a do-while statement
+	•For a given date and knowing the day of the week of the first day of the year of that date, show the day of the week of the given date.
+*/
 		
 }
 
