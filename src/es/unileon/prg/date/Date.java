@@ -77,7 +77,7 @@ public class Date
 		}
 		return isSameDay;
 	}
-/*SIN SENTENCIA IF DUDA PREGUNTAR	
+/*SIN SENTENCIA IF (ejemplo)	
 	public boolean isSameDay(Date date2)
 	{
 
@@ -197,7 +197,7 @@ public class Date
 	public boolean checkDaysOfMonth(int day)
 	{
 		boolean checkDaysOfMonth=false;
-		if(day>0&&day<this.daysOfMonth(getMonth())){
+		if(day>0&&day<=this.daysOfMonth(getMonth())){
 			checkDaysOfMonth=true;
 		}
 		return checkDaysOfMonth;
@@ -298,9 +298,10 @@ public class Date
 	public String dateUntilEndMonth()
 		{
 		int i;
+		int days=daysOfMonth(getMonth());
 		StringBuffer dates=new StringBuffer();
-		dates.append("The days to the end of the month "+printMonthName(getMonth())+" are;\n");
-		for(i=getDay()+1;i<=daysOfMonth(getMonth());i++)
+		dates.append("The dates until the end of the month are:\n");
+		for(i=getDay()+1;i<=days;i++)
 		{
 			dates.append(i+","+printMonthName(getMonth())+","+getYear()+"\n");
 		}
@@ -329,37 +330,133 @@ public class Date
 
 
 //•For a date, count the number  of  days since the first day of  the year (do not consider leap years)	
-	public String sinceFirstDayOfYear()
+	public int sinceFirstDayOfYear()
 	{
-		StringBuffer dates = new StringBuffer();
-		int i,j,k;
-		dates.append("The days since the first day of the year until "+printDate()+" are:\n");
-		for(i=1;i<=getMonth();i++)
+		int checkdays;
+		int cont=getDay();
+		int mymonth=getMonth();
+		for(int i=1;i<mymonth;i++)
 		{
-			if(i!=getMonth())
+			checkdays=daysOfMonth(i);
+			for(int j=1;j<=checkdays;j++)
 			{
-				for(j=1;j<=daysOfMonth(i);j++)
-				{
-					dates.append(j+","+printMonthName(i)+","+getYear()+"\n");
-				}
+				cont++;
 			}
-				else
-				{
-					for(k=1;k<getDay();k++)
-					{
-					dates.append(k+","+printMonthName(i)+","+getYear()+"\n");
-					}
-				}
+			
 		}
-		return dates.toString();
+		return cont - 1;
 	}
+
 /*
 •In the Date class build the following methods:
 	•Build a method that counts the number of attempts needed to generate a random date equals to a given date(only inside the same year)
 		•Do it using a while statement
 		•Do it using a do-while statement
-	•For a given date and knowing the day of the week of the first day of the year of that date, show the day of the week of the given date.
 */
+	public int randomDate()
+	{
+		int cont, pcday, pcmonth, pcyear;
+		cont=0;
+		try{        
+			do{
+        			pcmonth=(int)(Math.random()*12)+1;
+        			pcday=(int)(Math.random()*daysOfMonth(pcmonth))+1;
+				pcyear=getYear();
+        			cont++;
+        		}while(!this.isSame(new Date (pcday,pcmonth,pcyear)));
+		}catch(Excepcion error){
+			System.err.println(error.getMessage());
+		}
+		return cont;
+	}
+/*
+•For a given date and knowing the day of the week of the first day of the year of that date, show the day of the week of the given date.
+*/
+	// Método que devuelve el nombre del día de la semana, pasandole el número de la semana correspondiente.
+	public String nameOfDay(int day) {
+
+		String name = null;
+
+		switch (day) {
+
+		  case 0:
+		    name = "Monday";
+		    break;
+		  case 1:
+		    name = "Tuesday";
+		    break;
+		  case 2:
+		    name = "Wednesday";
+		    break;
+		  case 3:
+		    name = "Thursday";
+		    break;
+		  case 4:
+		    name = "Friday";
+		    break;
+		  case 5:
+		    name = "Saturday";
+		    break;
+		  case 6:
+		    name = "Sunday";
+		    break;
+		  default:
+		    System.err.println("ERROR recibiendo int");
+		}
+
+		return name;
+	}
+	
+	// Método sobrecargado, devuelve el número de la semana, pasandole el nombre como argumento.
+	public int nameOfDay(String name) {
+
+		int day = 0;
+		name=name.toLowerCase();
 		
+		switch (name) {
+
+		  case "monday":
+		  case "lunes":
+		    day = 0;
+		    break;
+		  case "tuesday":
+		  case "martes":
+		    day = 1;
+		    break;
+		  case "wednesday":
+		  case "miercoles":
+		    day = 2;
+		    break;
+		  case "thursday":
+		  case "jueves":
+		    day = 3;
+		    break;
+		  case "friday":
+		  case "viernes":
+		    day = 4;
+		    break;
+		  case "saturday":
+		  case "sabado":
+		    day = 5;
+		    break;
+		  case "sunday":
+		  case "domingo":
+		    day = 6;
+		    break;
+		  
+		  default:
+		    System.err.println("ERROR recibiendo string");
+		}
+
+		return day;
+	}
+
+	public String dayOfWeek(String nameDay)
+	{
+		int firstOfYear = nameOfDay(nameDay);
+		int dayOfWeek;
+		dayOfWeek=((sinceFirstDayOfYear()%7) + firstOfYear) % 7;
+		return nameOfDay(dayOfWeek);
+	}
 }
 
